@@ -209,3 +209,6 @@ CodeDB
 LinuxFrontEnd/VisualGDBCache
 testout.txt
 lib
+
+# VS Code
+.vscode/
