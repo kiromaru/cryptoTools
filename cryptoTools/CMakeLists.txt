@@ -85,8 +85,8 @@ set(Miracl_Dirs "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/miracl")
 set(Miracl_Lib_Dirs "${Miracl_Dirs}/lib")
 find_library(MIRACL_LIB
     NAMES miracl
-    PATHS "${Miracl_Lib_Dirs}/Release"
-          "${Miracl_lib_Dirs}")
+    HINTS "${Miracl_Lib_Dirs}"
+    PATH_SUFFIXES "Release")
 
 # if we can't find it, throw an error
 if(NOT MIRACL_LIB)
