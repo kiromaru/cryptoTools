@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+cd ..
 
 if [ ! -d boost ]; then
     wget -c 'https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.bz2' -O ./boost_1_65_1.tar.bz2
