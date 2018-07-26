@@ -2,15 +2,18 @@
 
 set -e
 
+cd ..
+
 if [ ! -d miracl ]
 then
     echo "downloading Miracl"
-    git clone https://github.com/ladnir/miracl
+    git clone https://github.com/kiromaru/miracl
 fi
 
-if [ ! -e miracl/miracl/source/libmiracl.a ]
+if [ ! -e miracl/lib/libmiracl.a ]
 then
-    echo "building Mircal"
-    cd miracl/miracl/source/
-    bash linux64
+    echo "building Miracl"
+    cd miracl
+    cmake . -DCMAKE_BUILD_TYPE=RELEASE
+    make
 fi
