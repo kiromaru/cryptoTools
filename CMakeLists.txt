@@ -57,6 +57,29 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	endif(MSVC)
 endif() 
 
+## Boost
+###########################################################################
+# Find Boost library. The Boost path is used in several subdirectories.
+
+set(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/boost/")
+
+set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_MULTITHREADED      ON)
+set(Boost_USE_STATIC_RUNTIME     ON)
+
+find_package(Boost COMPONENTS system thread)
+
+if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Failed to find boost at " ${Boost_Lib_Dirs} " Need system thread")
+endif()
+
+IF(INSTALL_BOOST)
+    INSTALL(DIRECTORY "${Boost_INCLUDE_DIR}/boost" DESTINATION include)
+    INSTALL(FILES ${Boost_LIBRARIES} DESTINATION lib)
+ENDIF(INSTALL_BOOST)
+
+message(STATUS "Boost_include  ${Boost_INCLUDE_DIR}" )
+
 #############################################
 #       cryptoTools, tests, frontend        #
 #############################################
@@ -65,6 +88,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(cryptoTools)
 add_subdirectory(tests_cryptoTools)
+if (MSVC)
+	add_subdirectory(testsVS_cryptoTools)
+endif(MSVC)
 add_subdirectory(frontend_cryptoTools)
 
 install(FILES cryptotools-config.cmake DESTINATION cmake/)

@@ -110,25 +110,5 @@ INSTALL(FILES ${MIRACL_LIB} DESTINATION lib)
 ## Boost
 ###########################################################################
 
-set(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/boost/")
-
-set(Boost_USE_STATIC_LIBS        ON) # only find static libs
-set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME     ON)
-
-find_package(Boost COMPONENTS system thread)
-
-if(NOT Boost_FOUND)
-    message(FATAL_ERROR "Failed to find boost at " ${Boost_Lib_Dirs} " Need system thread")
-endif()
-
 target_include_directories(cryptoTools PUBLIC ${Boost_INCLUDE_DIR}) 
 target_link_libraries(cryptoTools ${Boost_LIBRARIES})
-
-
-IF(INSTALL_BOOST)
-    INSTALL(DIRECTORY "${Boost_INCLUDE_DIR}/boost" DESTINATION include)
-    INSTALL(FILES ${Boost_LIBRARIES} DESTINATION lib)
-ENDIF(INSTALL_BOOST)
-
-message(STATUS "Boost_include  ${Boost_INCLUDE_DIR}" )
