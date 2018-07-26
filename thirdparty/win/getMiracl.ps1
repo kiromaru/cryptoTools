@@ -1,11 +1,12 @@
 ﻿$ErrorActionPreference = "Stop"
 
 $MSBuild_14 = 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'
-$MSBuild_15 = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe'
+$MSBuild_15 = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe'
 
 # Update this if needed
 $MSBuild = $MSBuild_15
 $git = 'git'
+$cmake = 'cmake'
 
 
 if(!(Test-Path $MSBuild))
@@ -17,25 +18,24 @@ if(!(Test-Path $MSBuild))
 
     exit
 }
- 
+
 $startDir = $PWD
- 
+Set-Location ..
+
 $folder =  "$PWD\miracl"
 if(!(Test-Path $folder))
 {
-
-    
-    & $git clone https://github.com/ladnir/miracl.git
-     
+    & $git clone https://github.com/kiromaru/miracl.git
 }
 else
 {
     Write-Host "$folder already exists. Skipping dowload and extract."
 }
 
-cd $folder
+Set-Location $folder
 
-& $MSBuild miracl.sln  /p:Configuration=Release /p:Platform=x64
-& $MSBuild miracl.sln  /p:Configuration=Debug /p:Platform=x64
+& $cmake . -G "Visual Studio 15 2017 Win64"
+& $MSBuild miracl.sln  /p:Configuration=Release
+& $MSBuild miracl.sln  /p:Configuration=Debug
 
-cd $startDir
+Set-Location $startDir
