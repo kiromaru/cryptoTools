@@ -10,8 +10,15 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/lib)
 	set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/lib)
 
-	
-	set(CMAKE_C_FLAGS "-ffunction-sections -Wall  -maes -msse2 -msse4.1 -mpclmul -Wfatal-errors -pthread -fPIC -Wno-ignored-attributes")
+	if(CMAKE_COMPILER_IS_GNUCXX)
+		set(CMAKE_C_FLAGS "-ffunction-sections -Wall  -maes -msse2 -msse4.1 -mpclmul -Wfatal-errors -pthread -fPIC -Wno-ignored-attributes")
+	endif(CMAKE_COMPILER_IS_GNUCXX)
+	if(MSVC)
+		ADD_DEFINITIONS(/arch:AVX2)
+		ADD_DEFINITIONS(/EHsc)
+		ADD_DEFINITIONS(-D_WIN32_WINNT=0x0601)
+		ADD_DEFINITIONS(/MT)
+	endif(MSVC)
 	set(CMAKE_CXX_FLAGS  "${CMAKE_C_FLAGS}  -std=c++14")
 
 	
@@ -36,15 +43,17 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	endif()
 
 	# Select flags.
-	SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG") 
-	SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -O2 -g -ggdb -rdynamic")
-	SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -rdynamic")
-	
-	
+	if(CMAKE_COMPILER_IS_GNUCXX)
+		SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG") 	
+		SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -O2 -g -ggdb -rdynamic")
+		SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -rdynamic")
+	endif(CMAKE_COMPILER_IS_GNUCXX)
+	if(MSVC)
+		SET(CMAKE_CXX_FLAGS_RELEASE "-O2") 	
+		SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -O2 -Zi")
+		SET(CMAKE_CXX_FLAGS_DEBUG  "-Od -Zi")
+	endif(MSVC)
 endif() 
-
-
-
 
 #############################################
 #       cryptoTools, tests, frontend        #

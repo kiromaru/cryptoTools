@@ -29,6 +29,12 @@ else()
     set(shaNasmComment ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
     set(shaNasmCommand ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
     ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	
+	#Windows nasm flags
+	if(MSVC)
+	set(shaNasmComment ${NASM} -f win64 ${shaNasm} -o ${shaNasmOutput})
+	set(shaNasmCommand ${NASM} -f win64 ${shaNasm} -o ${shaNasmOutput})
+	endif(MSVC)
 
     add_custom_command(
             OUTPUT ${shaNasmOutput}
@@ -76,7 +82,7 @@ install(TARGETS cryptoTools DESTINATION lib)
 
 set(Miracl_Dirs "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/linux/miracl/")
 
-set(Miracl_Lib_Dirs "${Miracl_Dirs}/miracl/source/")
+set(Miracl_Lib_Dirs "${Miracl_Dirs}/miracl/source/Release")
 find_library(MIRACL_LIB NAMES miracl  HINTS "${Miracl_Lib_Dirs}")
 
 # if we cant fint it, throw an error
@@ -114,7 +120,6 @@ find_package(Boost COMPONENTS system thread)
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Failed to find boost at " ${Boost_Lib_Dirs} " Need system thread")
 endif()
-
 
 #MESSAGE(STATUS "boost ---  ${Boost_LIBRARIES}")
 #include_directories(${Boost_INCLUDE_DIR}) 
