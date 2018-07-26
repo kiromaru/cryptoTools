@@ -80,18 +80,19 @@ install(TARGETS cryptoTools DESTINATION lib)
 ## Miracl
 ###########################################################################
 
-set(Miracl_Dirs "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/linux/miracl/")
+set(Miracl_Dirs "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/miracl")
 
-set(Miracl_Lib_Dirs "${Miracl_Dirs}/miracl/source/Release")
-find_library(MIRACL_LIB NAMES miracl  HINTS "${Miracl_Lib_Dirs}")
+set(Miracl_Lib_Dirs "${Miracl_Dirs}/lib")
+find_library(MIRACL_LIB
+    NAMES miracl
+    PATHS "${Miracl_Lib_Dirs}/Release"
+          "${Miracl_lib_Dirs}")
 
-# if we cant fint it, throw an error
+# if we can't find it, throw an error
 if(NOT MIRACL_LIB)
     message(FATAL_ERROR "Failed to find miracl at " ${Miracl_Lib_Dirs})
 endif()
 message(STATUS "MIRACL_LIB:  ${MIRACL_LIB}")
-
-#include_directories("${Miracl_Dirs}") 
 
 target_include_directories(cryptoTools PUBLIC "${Miracl_Dirs}") 
 target_link_libraries(cryptoTools ${MIRACL_LIB})
@@ -109,7 +110,7 @@ INSTALL(FILES ${MIRACL_LIB} DESTINATION lib)
 ## Boost
 ###########################################################################
 
-set(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/linux/boost/")
+set(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../thirdparty/boost/")
 
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
@@ -121,9 +122,6 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Failed to find boost at " ${Boost_Lib_Dirs} " Need system thread")
 endif()
 
-#MESSAGE(STATUS "boost ---  ${Boost_LIBRARIES}")
-#include_directories(${Boost_INCLUDE_DIR}) 
-
 target_include_directories(cryptoTools PUBLIC ${Boost_INCLUDE_DIR}) 
 target_link_libraries(cryptoTools ${Boost_LIBRARIES})
 
@@ -133,6 +131,4 @@ IF(INSTALL_BOOST)
     INSTALL(FILES ${Boost_LIBRARIES} DESTINATION lib)
 ENDIF(INSTALL_BOOST)
 
-#file(COPY ${Boost_LIBRARIES}  DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
-#FILE(COPY "${Boost_INCLUDE_DIR}/boost" DESTINATION "${CMAKE_SOURCE_DIR}/include/boost")
 message(STATUS "Boost_include  ${Boost_INCLUDE_DIR}" )

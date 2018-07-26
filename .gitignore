@@ -6,6 +6,7 @@
 *.user
 *.sln.docstates
 .vs/
+.vscode/
 
 CMakeFiles/*
 *Makefile*
@@ -14,7 +15,12 @@ CMakeFiles/*
 *cmake_install.cmake
 
 CMakeCache.txt
-*/CMakeCache.txt
+*/CMakeCache.
+
+ALL_BUILD*
+INSTALL.*
+ZERO_CHECK.*
+
 
 
 # Build results
@@ -209,6 +215,3 @@ CodeDB
 LinuxFrontEnd/VisualGDBCache
 testout.txt
 lib
-
-# VS Code
-.vscode/
