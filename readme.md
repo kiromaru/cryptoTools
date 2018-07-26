@@ -17,12 +17,13 @@ In `Powershell`, this will set up the project
 ```
 git clone --recursive https://github.com/ladnir/cryptoTools
 cd cryptoTools/thirdparty/win
-getBoost.ps1; getMiracl.ps1
+./getBoost.ps1; ./getMiracl.ps1
 cd ../..
+cmake . -G "Visual Studio 15 2017 Win64"
 cryptoTools.sln
 ```
 
-Requirements: `Powershell`, Powershell `Set-ExecutionPolicy  Unrestricted`, `Visual Studio 2015`, CPU supporting `PCLMUL`, `AES-NI`, and `SSE4.1`.
+Requirements: `Powershell`, Powershell `Set-ExecutionPolicy  Unrestricted`, `CMake`, `Visual Studio 2015` or `Visual Studio 2017`, CPU supporting `PCLMUL`, `AES-NI`, and `SSE4.1`.
 Optional: `nasm` for improved SHA1 performance. 
  
 Build the solution within visual studio or with `MSBuild`. To see all the command line options, execute the program 
@@ -31,7 +32,7 @@ Build the solution within visual studio or with `MSBuild`. To see all the comman
   
 
 
-<b>IMPORTANT:</b> By default, the build system needs the NASM compiler to be located at `C:\NASM\nasm.exe`. In the event that it isn't, there are two options, install it, or enable the pure c++ implementation. The latter option is done by excluding `cryptoTools/Crypto/asm/sha_win64.asm` from the build system and undefining  `INTEL_ASM_SHA1` on line 28 of `cryptoTools/Crypto/sha1.cpp`.
+<b>IMPORTANT:</b> The build system needs the NASM compiler to be included in the command `PATH`. In the event that it isn't, there are two options, install it, or enable the pure c++ implementation. The pure c++ implementation will be enabled automatically if CMake is unable to find NASM.
 
 
  
