@@ -215,3 +215,8 @@ CodeDB
 LinuxFrontEnd/VisualGDBCache
 testout.txt
 lib
+
+# Project files are now CMake generated
+*.sln
+*.vcxproj
+*.vcxproj.filters
