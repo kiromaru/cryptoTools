@@ -19,6 +19,10 @@ else()
   
     set(shaNasm "${CMAKE_CURRENT_SOURCE_DIR}/Crypto/asm/sha_lnx.S")
     set(shaNasmOutput "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/cryptoTools.dir/Crypto/sha_lnx.S.o")
+	if (MSVC)
+        set(shaNasm "${CMAKE_CURRENT_SOURCE_DIR}/Crypto/asm/sha_win64.asm")
+        set(shaNasmOutput "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/cryptoTools.dir/Crypto/sha_win64.obj")
+	endif(MSVC)
 
     #Default nasm flags
     set(shaNasmComment ${NASM} -f elf64 ${shaNasm} -o ${shaNasmOutput})
@@ -26,14 +30,14 @@ else()
 
     #OSX nasm flags
     IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(shaNasmComment ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
-    set(shaNasmCommand ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
+        set(shaNasmComment ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
+        set(shaNasmCommand ${NASM} --prefix _ -f macho64 ${shaNasm} -o ${shaNasmOutput})
     ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	
 	#Windows nasm flags
 	if(MSVC)
-	set(shaNasmComment ${NASM} -f win64 ${shaNasm} -o ${shaNasmOutput})
-	set(shaNasmCommand ${NASM} -f win64 ${shaNasm} -o ${shaNasmOutput})
+        set(shaNasmComment ${NASM} -f win64 -DWIN_ABI ${shaNasm} -o ${shaNasmOutput})
+        set(shaNasmCommand ${NASM} -f win64 -DWIN_ABI ${shaNasm} -o ${shaNasmOutput})
 	endif(MSVC)
 
     add_custom_command(

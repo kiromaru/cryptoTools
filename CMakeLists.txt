@@ -18,8 +18,9 @@ if("${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 	if(MSVC)
 		ADD_DEFINITIONS(/arch:AVX2)
 		ADD_DEFINITIONS(/EHsc)
-		ADD_DEFINITIONS(-D_WIN32_WINNT=0x0601)
-		ADD_DEFINITIONS(/MT)
+		ADD_COMPILE_DEFINITIONS(_WIN32_WINNT=0x0601)
+		ADD_COMPILE_DEFINITIONS($<$<CONFIG:DEBUG>:_ITERATOR_DEBUG_LEVEL=2>)
+		ADD_COMPILE_DEFINITIONS($<$<CONFIG:DEBUG>:_DEBUG=1>)
 	endif(MSVC)
 	set(CMAKE_CXX_FLAGS  "${CMAKE_C_FLAGS}  -std=c++14")
 
@@ -62,10 +63,11 @@ endif()
 # Find Boost library. The Boost path is used in several subdirectories.
 
 set(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/boost/")
+#set (BOOST_ROOT "c:/progs/libs/boost-1.65.1/")
 
-set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+set(Boost_USE_STATIC_LIBS        OFF) # only find dymamic libs
 set(Boost_USE_MULTITHREADED      ON)
-set(Boost_USE_STATIC_RUNTIME     ON)
+set(Boost_USE_STATIC_RUNTIME     OFF)
 
 find_package(Boost COMPONENTS system thread)
 
@@ -77,6 +79,15 @@ IF(INSTALL_BOOST)
     INSTALL(DIRECTORY "${Boost_INCLUDE_DIR}/boost" DESTINATION include)
     INSTALL(FILES ${Boost_LIBRARIES} DESTINATION lib)
 ENDIF(INSTALL_BOOST)
+
+if (WIN32)
+  # disable autolinking in boost
+  add_definitions( -DBOOST_ALL_NO_LIB )
+
+  # force all boost libraries to dynamic link (we already disabled
+  # autolinking, so I don't know why we need this, but we do!)
+  add_definitions( -DBOOST_ALL_DYN_LINK )
+endif()
 
 message(STATUS "Boost_include  ${Boost_INCLUDE_DIR}" )
 
